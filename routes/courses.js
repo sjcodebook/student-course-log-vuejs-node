@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const uuidv4 = require('uuid/v4');
 let Courses = require('../models/coursesModel');
+let Students = require('../models/studentsModel');
 
 router.route('/').get((req, res) => {
   Courses.find()
@@ -53,6 +54,37 @@ router.route('/update/:id').put((req, res) => {
         .catch(err => res.status(400).json('Error: ' + err));
     })
     .catch(err => res.status(400).json('Error: ' + err));
+});
+
+router.route('/getstudentbycourse/:name').get(async (req, res) => {
+  const courseIdArr = [];
+  const course = await Courses.aggregate([
+    {
+      $match: { Course_name: { $eq: req.params.name } }
+    },
+    {
+      $unwind: '$Students'
+    },
+    {
+      $project: {
+        _id: 0,
+        Students: 1
+      }
+    }
+  ]);
+
+  course.forEach(e => {
+    courseIdArr.push(e.Students);
+  });
+
+  const student = await Students.find(
+    { Student_id: { $in: courseIdArr } },
+    { _id: 0, Name: 1 }
+  );
+
+  res.status(200).json({
+    student
+  });
 });
 
 module.exports = router;
