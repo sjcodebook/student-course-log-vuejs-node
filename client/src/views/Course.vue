@@ -1,6 +1,6 @@
 <template>
   <div id="course">
-    <AddCourse v-on:add-course="addCourse" />
+    <AddCourse v-bind:allStudents="allStudents" v-on:add-course="addCourse" />
   </div>
 </template>
 
@@ -14,16 +14,18 @@ export default {
   },
   data() {
     return {
-      allCourses: []
+      allCourses: [],
+      allStudents: []
     };
   },
   methods: {
     addCourse(newCourse) {
-      const { Course_name, Professor } = newCourse;
+      const { Course_name, Professor, Students } = newCourse;
       axios
         .post("http://localhost:5000/courses/add", {
           Course_name,
-          Professor
+          Professor,
+          Students
         })
         .then(res => this.allCourses.push(res.data))
         .catch(err => console.log(err));
@@ -33,6 +35,11 @@ export default {
     axios
       .get("http://localhost:5000/courses/")
       .then(res => (this.allCourses = res.data))
+      .catch(err => console.log(err));
+
+    axios
+      .get("http://localhost:5000/students/")
+      .then(res => (this.allStudents = res.data))
       .catch(err => console.log(err));
   }
 };

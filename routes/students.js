@@ -14,7 +14,7 @@ router.route('/add').post((req, res) => {
   const Name = req.body.Name;
   const Address = req.body.Address;
   const College = req.body.College;
-  const Courses = ['1', '2'];
+  const Courses = req.body.Courses;
 
   const newStudent = new Students({
     Student_id,
@@ -50,7 +50,7 @@ router.route('/update/:id').put((req, res) => {
       student.Name = req.body.Name;
       student.Address = req.body.Address;
       student.College = req.body.College;
-      student.Courses = ['1', '2'];
+      student.Courses = req.body.Courses;
 
       student
         .save()
