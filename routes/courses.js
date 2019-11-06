@@ -12,7 +12,7 @@ router.route('/add').post((req, res) => {
   const Course_id = uuidv4();
   const Course_name = req.body.Course_name;
   const Professor = req.body.Professor;
-  const Students = req.body.Students;
+  const Students = ['1', '2'];
 
   const newCourse = new Courses({
     Course_id,
@@ -45,7 +45,7 @@ router.route('/update/:id').put((req, res) => {
       course.Course_id = uuidv4();
       course.Course_name = req.body.Course_name;
       course.Professor = req.body.Professor;
-      course.Students = req.body.Students;
+      course.Students = ['1', '2'];
 
       course
         .save()
